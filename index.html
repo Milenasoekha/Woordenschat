@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<title>Woordenschatspel – Sport</title>
+<style>
+    body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #ffeaa7, #fab1a0);
+        text-align: center;
+        padding: 20px;
+        min-height: 100vh;
+        margin: 0;
+    }
+    .game {
+        background: #fff;
+        max-width: 750px;
+        margin: auto;
+        padding: 30px;
+        border-radius: 30px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+    h2 { color: #e84393; font-size: 36px; margin-bottom: 15px; }
+    .instuctie { color: #2d3436; margin-bottom: 20px; font-size: 18px; }
+    
+    /* Niveau + start in één rij */
+    .controls {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+    select, button {
+        padding: 12px 20px;
+        font-size: 18px;
+        border-radius: 20px;
+        border: none;
+        cursor: pointer;
+        transition: transform 0.1s;
+    }
+    select { background: #74b9ff; color: white; }
+    button { background: #55efc4; color: #2d3436; font-weight: bold; }
+    button:active { transform: scale(0.95); }
+
+    .box {
+        background: #ffeaa7;
+        padding: 30px;
+        border-radius: 20px;
+        font-size: 28px;
+        font-weight: bold;
+        margin: 20px 0;
+        min-height: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 3px dashed #e17055;
+        transition: opacity 0.5s ease;
+    }
+    .vervaag { opacity: 0; pointer-events: none; }
+
+    input {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 15px;
+        font-size: 22px;
+        border-radius: 20px;
+        border: 3px solid #fd79a8;
+        text-align: center;
+        outline: none;
+    }
+
+    .feedback {
+        margin-top: 20px;
+        font-size: 22px;
+        font-weight: bold;
+        min-height: 35px;
+    }
+    .goed { color: #00b894; }
+    .fout { color: #d63031; }
+
+    .score-bord {
+        margin-top: 25px;
+        padding-top: 20px;
+        border-top: 2px solid #fdcb6e;
+        font-size: 20px;
+        color: #2d3436;
+    }
+
+    /* Woordenbeheer onderaan */
+    .beheer {
+        margin-top: 40px;
+        padding: 20px;
+        background: #dfe6e9;
+        border-radius: 20px;
+        border: 2px dashed #0984e3;
+    }
+    textarea {
+        width: 100%;
+        height: 120px;
+        font-size: 16px;
+        padding: 10px;
+        border-radius: 12px;
+        border: 2px solid #74b9ff;
+        margin-bottom: 10px;
+    }
+</style>
+</head>
+<body>
+
+<div class="game">
+    <h2>🏆 Woordenschatspel</h2>
+    <p class="instuctie">Onthoud het woord (Makkelijk) of raad het woord bij de betekenis (Moeilijk).</p>
+
+    <!-- Niveau + start knop -->
+    <div class="controls">
+        <select id="niveau">
+            <option value="makkelijk">⭐ Makkelijk (Onthouden)</option>
+            <option value="moeilijk">⭐⭐ Moeilijk (Betekenis)</option>
+        </select>
+        <button onclick="startSpel()">Start!</button>
+    </div>
+
+    <div class="box" id="toonBox">Klik op start om te beginnen</div>
+
+    <input type="text" id="antwoord" placeholder="Typ je antwoord..." autocomplete="off">
+    <br>
+    <button onclick="controleer()">Check!</button>
+
+    <div class="feedback" id="feedback"></div>
+
+    <div class="score-bord">
+        Voortgang: <span id="score">0</span> / <span id="totaal">0</span>
+    </div>
+
+    <!-- Woordenbeheer onderaan -->
+    <div class="beheer">
+        <h3>📚 Woorden beheren</h3>
+        <textarea id="importVeld" placeholder="Plak hier je woorden in het formaat: woord - betekenis"></textarea><br>
+        <button onclick="importeerWoorden()">Importeer woorden</button>
+    </div>
+</div>
+
+<script>
+let woorden = [
+    { woord: "balanceren", betekenis: "In evenwicht proberen te blijven." },
+    { woord: "beoefenen", betekenis: "Iets doen of uitvoeren. Zoals een sport doen." },
+    { woord: "de conditie", betekenis: "Je lichamelijke toestand, hoe fit je bent." },
+    { woord: "de duursport", betekenis: "Een sport die je lang achter elkaar doet." },
+    { woord: "fanatiek", betekenis: "Heel enthousiast en fel, graag willen winnen." },
+    { woord: "geblesseerd", betekenis: "Gewond geraakt tijdens het sporten." },
+    { woord: "individueel", betekenis: "Iets wat je in je eentje doet." },
+    { woord: "de pass", betekenis: "De bal naar een teamspeler overspelen." },
+    { woord: "de prof", betekenis: "Iemand die sport als beroep heeft." },
+    { woord: "de puck", betekenis: "De platte schijf bij ijshockey." },
+    { woord: "serveren", betekenis: "De bal als eerste in het spel brengen." },
+    { woord: "de waaghals", betekenis: "Iemand die veel durft en niet snel bang is." }
+];
+
+let index = 0;
+let score = 0;
+let huidigeWoorden = [];
+
+const box = document.getElementById("toonBox");
+const feedbackEl = document.getElementById("feedback");
+const scoreEl = document.getElementById("score");
+const totaalEl = document.getElementById("totaal");
+const antwoordEl = document.getElementById("antwoord");
+const niveauSelect = document.getElementById("niveau");
+
+antwoordEl.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") controleer();
+});
+
+function importeerWoorden() {
+    const tekst = document.getElementById("importVeld").value.trim();
+    if (!tekst) { alert("Plak eerst woorden in het tekstvak!"); return; }
+    const regels = tekst.split("\n");
+    const nieuweWoorden = [];
+    regels.forEach(regel => {
+        const delen = regel.split(" - ");
+        if(delen.length === 2) nieuweWoorden.push({ woord: delen[0].trim(), betekenis: delen[1].trim() });
+    });
+    if(nieuweWoorden.length > 0) {
+        woorden = nieuweWoorden;
+        alert(`✅ ${woorden.length} woorden succesvol geïmporteerd!`);
+    } else { alert("❌ Geen correcte woorden gevonden. Gebruik: woord - betekenis"); }
+}
+
+function shuffle(arr) { return arr.sort(() => Math.random() - 0.5); }
+
+function startSpel() {
+    huidigeWoorden = shuffle([...woorden]);
+    index = 0;
+    score = 0;
+    scoreEl.textContent = "0";
+    totaalEl.textContent = huidigeWoorden.length;
+    toonItem();
+}
+
+function toonItem() {
+    feedbackEl.textContent = "";
+    feedbackEl.className = "feedback";
+    antwoordEl.value = "";
+    box.classList.remove("vervaag");
+    if (index >= huidigeWoorden.length) return;
+    const item = huidigeWoorden[index];
+    const niveau = niveauSelect.value;
+    if (niveau === "makkelijk") {
+        box.textContent = item.woord;
+        setTimeout(() => { if(index < huidigeWoorden.length) box.classList.add("vervaag"); }, 5000);
+    } else {
+        box.textContent = item.betekenis;
+    }
+    antwoordEl.focus();
+}
+
+function controleer() {
+    if(index >= huidigeWoorden.length) return;
+    const userInput = antwoordEl.value.trim().toLowerCase();
+    const echtWoord = huidigeWoorden[index].woord.toLowerCase();
+    const schoonWoord = echtWoord.replace(/^de |^het /, "");
+    const schoonInput = userInput.replace(/^de |^het /, "");
+    if (schoonInput === schoonWoord && schoonInput !== "") {
+        feedbackEl.textContent = "✅ Geweldig!";
+        feedbackEl.className = "feedback goed";
+        score++;
+        scoreEl.textContent = score;
+        index++;
+        if (index < huidigeWoorden.length) { setTimeout(toonItem, 1000); }
+        else { box.textContent = "🎉 Klaar!"; feedbackEl.textContent = `Eindscore: ${score} van de ${huidigeWoorden.length}!`; }
+    } else {
+        feedbackEl.textContent = "❌ Jammer! Probeer het nog eens.";
+        feedbackEl.className = "feedback fout";
+        if (niveauSelect.value === "makkelijk") box.classList.remove("vervaag");
+    }
+}
+
+startSpel();
+</script>
+</body>
+</html>
