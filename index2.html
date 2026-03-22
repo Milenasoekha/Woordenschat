@@ -1,666 +1,197 @@
 <!DOCTYPE html>
-
 <html lang="nl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Woordjes Leren ✏️</title>
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Nunito', sans-serif; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Woordjes Leren</title>
 
-```
-.app {
-  min-height: 100vh;
-  background: #FFF9F0;
-  background-image: radial-gradient(circle at 20% 20%, #FFE5E5 0%, transparent 50%),
-                    radial-gradient(circle at 80% 80%, #E5F0FF 0%, transparent 50%);
-  padding: 24px 16px;
-}
-
-.header { text-align: center; margin-bottom: 32px; }
-.title { font-family: 'Fredoka One', cursive; font-size: 2.8rem; color: #2D2D2D; letter-spacing: 1px; }
-.title span { color: #FF6B6B; }
-.subtitle { font-size: 1rem; color: #777; margin-top: 4px; }
-
-.card {
-  background: white; border-radius: 24px; padding: 32px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.08);
-  max-width: 640px; margin: 0 auto;
-}
-
-.section-title {
-  font-family: 'Fredoka One', cursive; font-size: 1.6rem;
-  color: #2D2D2D; margin-bottom: 8px; text-align: center;
-}
-.section-sub { text-align: center; color: #888; font-size: 0.95rem; margin-bottom: 20px; line-height: 1.6; }
-.section-sub strong { color: #FF6B6B; }
-
-textarea {
-  width: 100%; min-height: 220px; border-radius: 16px;
-  border: 2px solid #FFD93D; padding: 16px;
-  font-family: 'Nunito', sans-serif; font-size: 1rem;
-  color: #2D2D2D; resize: vertical; outline: none;
-  background: #FFFDF0; line-height: 1.8; transition: border-color 0.2s;
-}
-textarea:focus { border-color: #FF9A3C; }
-
-.btn {
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 14px 28px; border-radius: 50px; border: none;
-  font-family: 'Fredoka One', cursive; font-size: 1.1rem;
-  cursor: pointer; transition: transform 0.15s, box-shadow 0.15s;
-  letter-spacing: 0.5px;
-}
-.btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
-.btn:active { transform: translateY(0); }
-.btn-primary { background: #FF6B6B; color: white; }
-.btn-secondary { background: #FFD93D; color: #2D2D2D; }
-.btn-ghost { background: #f0f0f0; color: #555; }
-.btn-blue { background: #4D96FF; color: white; }
-
-.btn-row { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-top: 20px; }
-
-/* WORD TABLE */
-.word-table { width: 100%; border-collapse: collapse; margin-bottom: 24px; }
-.word-table th { font-family: 'Fredoka One', cursive; font-size: 1rem; padding: 10px 16px; text-align: left; color: white; }
-.word-table th:first-child { background: #4D96FF; border-radius: 12px 0 0 12px; }
-.word-table th:last-child { background: #C77DFF; border-radius: 0 12px 12px 0; }
-.word-table td { padding: 10px 16px; font-size: 0.95rem; border-bottom: 1px solid #f0f0f0; vertical-align: top; }
-.word-table tr:last-child td { border-bottom: none; }
-.word-table tr:hover td { background: #fafafa; }
-.word-badge { font-weight: 800; }
-
-/* MODE PICKER */
-.mode-picker { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
-.mode-card {
-  border: 2px solid #eee; border-radius: 16px; padding: 18px 14px;
-  text-align: center; cursor: pointer; transition: all 0.2s; background: #fafafa;
-}
-.mode-card:hover { border-color: #FFD93D; background: #FFFDF0; transform: translateY(-2px); }
-.mode-card.selected { border-color: #FF6B6B; background: #FFF0F0; }
-.mode-card .mode-icon { font-size: 2rem; display: block; margin-bottom: 8px; }
-.mode-card .mode-name { font-family: 'Fredoka One', cursive; font-size: 1rem; color: #2D2D2D; margin-bottom: 4px; }
-.mode-card .mode-desc { font-size: 0.8rem; color: #888; }
-
-/* DIRECTION PICKER */
-.dir-row { display: flex; gap: 10px; justify-content: center; margin-bottom: 20px; flex-wrap: wrap; }
-.dir-btn {
-  padding: 8px 18px; border-radius: 50px; border: 2px solid transparent;
-  font-family: 'Fredoka One', cursive; font-size: 0.9rem; cursor: pointer;
-  transition: all 0.2s; background: #f0f0f0; color: #777;
-}
-.dir-btn.active { background: white; color: #4D96FF; border-color: #4D96FF; }
-
-/* PROGRESS */
-.progress-bar-bg { background: #f0f0f0; border-radius: 50px; height: 12px; margin-bottom: 24px; overflow: hidden; }
-.progress-bar-fill { height: 100%; border-radius: 50px; background: linear-gradient(90deg, #FF6B6B, #FFD93D); transition: width 0.4s ease; }
-.progress-label { text-align: center; font-size: 0.85rem; color: #999; margin-bottom: 8px; }
-
-/* FLASHCARD */
-.flashcard-container {
-  perspective: 1200px; width: 100%; max-width: 440px;
-  margin: 0 auto 28px; height: 220px; cursor: pointer;
-}
-.flashcard-inner {
-  position: relative; width: 100%; height: 100%;
-  transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  transform-style: preserve-3d;
-}
-.flashcard-inner.flipped { transform: rotateY(180deg); }
-.flashcard-face {
-  position: absolute; inset: 0; border-radius: 24px;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  padding: 28px; backface-visibility: hidden; -webkit-backface-visibility: hidden;
-  text-align: center; box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-}
-.flashcard-front { color: white; }
-.flashcard-back { background: white; transform: rotateY(180deg); border: 3px solid currentColor; }
-.card-label { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; opacity: 0.7; margin-bottom: 12px; }
-.card-word { font-family: 'Fredoka One', cursive; font-size: 2.2rem; line-height: 1.2; }
-.card-hint { margin-top: 12px; font-size: 0.85rem; opacity: 0.6; }
-.card-back-meaning { font-size: 1.15rem; font-weight: 700; line-height: 1.5; color: #2D2D2D; }
-
-.answer-buttons { display: flex; gap: 16px; justify-content: center; }
-.answer-btn {
-  padding: 14px 32px; border-radius: 50px; border: none;
-  font-family: 'Fredoka One', cursive; font-size: 1.1rem;
-  cursor: pointer; transition: transform 0.15s, box-shadow 0.15s;
-}
-.answer-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
-.answer-btn.correct { background: #6BCB77; color: white; }
-.answer-btn.wrong { background: #FF6B6B; color: white; }
-
-/* TYPING MODE */
-.type-question-box {
-  border-radius: 20px; padding: 28px; text-align: center;
-  margin-bottom: 24px; color: white;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-}
-.type-question-label { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; opacity: 0.75; margin-bottom: 10px; }
-.type-question-word { font-family: 'Fredoka One', cursive; font-size: 2rem; line-height: 1.2; }
-
-.type-input-wrap { position: relative; margin-bottom: 16px; }
-.type-input {
-  width: 100%; padding: 16px 20px; border-radius: 14px;
-  border: 2px solid #ddd; font-family: 'Nunito', sans-serif;
-  font-size: 1.1rem; color: #2D2D2D; outline: none;
-  transition: border-color 0.2s; background: white;
-}
-.type-input:focus { border-color: #4D96FF; }
-.type-input.correct-input { border-color: #6BCB77; background: #F0FFF4; }
-.type-input.wrong-input { border-color: #FF6B6B; background: #FFF0F0; }
-
-.type-feedback {
-  border-radius: 14px; padding: 14px 18px;
-  font-size: 1rem; font-weight: 700; margin-bottom: 16px;
-  display: none; align-items: flex-start; gap: 10px;
-}
-.type-feedback.show { display: flex; }
-.type-feedback.correct-fb { background: #F0FFF4; color: #2D8A4E; border: 2px solid #6BCB77; }
-.type-feedback.wrong-fb { background: #FFF0F0; color: #CC3333; border: 2px solid #FF6B6B; }
-.fb-icon { font-size: 1.3rem; flex-shrink: 0; }
-.fb-text { line-height: 1.5; }
-.fb-correct-answer { font-weight: 800; }
-
-/* diff highlight */
-.diff-char { display: inline; }
-.diff-wrong { color: #FF6B6B; text-decoration: underline; }
-.diff-missing { color: #FF9A3C; font-style: italic; }
-.diff-correct { color: #2D8A4E; }
-
-/* RESULTS */
-.results { text-align: center; padding: 16px 0; }
-.score-circle {
-  width: 130px; height: 130px; border-radius: 50%;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  margin: 0 auto 20px; font-family: 'Fredoka One', cursive;
-}
-.score-num { font-size: 2.8rem; line-height: 1; color: white; }
-.score-denom { font-size: 1rem; color: rgba(255,255,255,0.8); }
-.result-message { font-family: 'Fredoka One', cursive; font-size: 1.6rem; color: #2D2D2D; margin-bottom: 8px; }
-.result-sub { color: #777; margin-bottom: 24px; }
-.stars { font-size: 2rem; margin-bottom: 8px; }
-
-.mistakes-title { font-family: 'Fredoka One', cursive; font-size: 1.1rem; color: #FF6B6B; margin-bottom: 12px; text-align: left; }
-.mistake-row { display: flex; gap: 8px; align-items: baseline; padding: 8px 0; border-bottom: 1px solid #f5f5f5; font-size: 0.95rem; }
-.mistake-row:last-child { border-bottom: none; }
-.mistake-word { font-weight: 800; color: #2D2D2D; min-width: 100px; }
-.mistake-meaning { color: #777; }
-.mistakes-box { background: #FFF8F8; border-radius: 14px; padding: 16px; margin-bottom: 20px; text-align: left; }
-
-.error-box {
-  background: #FFF0F0; border: 2px solid #FF6B6B; border-radius: 16px;
-  padding: 16px; color: #CC3333; font-weight: 700; text-align: center; margin-top: 16px;
-}
-
-.hidden { display: none !important; }
-.center { text-align: center; }
-.mt12 { margin-top: 12px; }
-.mb16 { margin-bottom: 16px; }
-```
-
-  </style>
+<style>
+body{font-family:sans-serif;background:#FFF9F0;margin:0}
+.app{max-width:700px;margin:auto;padding:20px}
+.card{background:white;border-radius:16px;padding:20px;margin-bottom:20px}
+.hidden{display:none}
+button{padding:10px 20px;border:none;border-radius:10px;cursor:pointer}
+.primary{background:#FF6B6B;color:white}
+.secondary{background:#4D96FF;color:white}
+</style>
 </head>
+
 <body>
 <div class="app">
-  <div class="header">
-    <div class="title">Woordjes <span>Leren</span> ✏️</div>
-    <div class="subtitle">Typ je woordjes in en ga oefenen!</div>
-  </div>
 
-  <!-- INVOER -->
-
-  <div id="step-scan" class="card">
-    <div class="section-title">📝 Voer je woordjes in</div>
-    <p class="section-sub">Typ elk woordje op een nieuwe regel:<br><strong>woord - betekenis</strong></p>
-    <textarea id="words-input" placeholder="Bijvoorbeeld:
-appel - een rond fruit
-fiets - vervoermiddel met twee wielen
-vrolijk - blij en opgewekt
-bewolkt - er hangen veel wolken in de lucht"></textarea>
-    <div id="error-box" class="error-box hidden"></div>
-    <div class="btn-row">
-      <button class="btn btn-primary" id="btn-load">📋 Woordjes laden!</button>
-    </div>
-  </div>
-
-  <!-- LIJST + MODUS KEUZE -->
-
-  <div id="step-list" class="card hidden">
-    <div class="section-title" id="word-list-title"></div>
-    <table class="word-table">
-      <thead><tr><th>Woord</th><th>Betekenis</th></tr></thead>
-      <tbody id="word-tbody"></tbody>
-    </table>
-
-```
-<div class="section-title" style="font-size:1.2rem;margin-bottom:12px;">Kies een oefenmodus:</div>
-<div class="mode-picker">
-  <div class="mode-card selected" id="modecard-flash" onclick="selectMode('flash')">
-    <span class="mode-icon">🃏</span>
-    <div class="mode-name">Flashcards</div>
-    <div class="mode-desc">Bekijk het antwoord en beoordeel jezelf</div>
-  </div>
-  <div class="mode-card" id="modecard-type" onclick="selectMode('type')">
-    <span class="mode-icon">⌨️</span>
-    <div class="mode-name">Schrijf het op</div>
-    <div class="mode-desc">Typ het antwoord foutloos in</div>
-  </div>
+<div id="input" class="card">
+<h2>📝 Woordjes</h2>
+<textarea id="words" rows="8" style="width:100%"></textarea>
+<br><br>
+<button id="load" class="primary">Start</button>
 </div>
 
-<div class="section-title" style="font-size:1.1rem;margin-bottom:10px;">Richting:</div>
-<div class="dir-row">
-  <div class="dir-btn active" id="dir-woord" onclick="selectDir('woord')">📝 Woord → Betekenis</div>
-  <div class="dir-btn" id="dir-betekenis" onclick="selectDir('betekenis')">🔁 Betekenis → Woord</div>
+<div id="quiz" class="card hidden">
+<h2 id="question"></h2>
+<input id="answer" placeholder="Typ antwoord..." style="width:100%;padding:10px">
+<br><br>
+<button id="check" class="primary">Check</button>
+<button id="next" class="secondary hidden">Volgende</button>
+<p id="feedback"></p>
 </div>
 
-<div class="btn-row">
-  <button class="btn btn-primary" id="btn-start-practice">🚀 Start oefening!</button>
-</div>
-<div class="center mt12">
-  <button class="btn btn-ghost" id="btn-edit">✏️ Woordjes aanpassen</button>
-</div>
-```
-
-  </div>
-
-  <!-- FLASHCARD OEFENING -->
-
-  <div id="step-flash" class="card hidden">
-    <div style="display:flex;gap:8px;justify-content:center;margin-bottom:20px;">
-      <div class="dir-btn active" id="flash-tab-woord" onclick="selectDir('woord'); startPractice();">Woord → Betekenis</div>
-      <div class="dir-btn" id="flash-tab-betekenis" onclick="selectDir('betekenis'); startPractice();">Betekenis → Woord</div>
-    </div>
-    <div class="progress-label" id="flash-progress-label"></div>
-    <div class="progress-bar-bg"><div class="progress-bar-fill" id="flash-progress-fill"></div></div>
-
-```
-<div class="flashcard-container" id="flashcard-container">
-  <div class="flashcard-inner" id="flashcard-inner">
-    <div class="flashcard-face flashcard-front" id="card-front">
-      <div class="card-label" id="front-label"></div>
-      <div class="card-word" id="front-word"></div>
-      <div class="card-hint" id="front-hint"></div>
-    </div>
-    <div class="flashcard-face flashcard-back" id="card-back">
-      <div class="card-label" id="back-label"></div>
-      <div class="card-back-meaning" id="back-meaning"></div>
-    </div>
-  </div>
+<div id="result" class="card hidden">
+<h2>Resultaat</h2>
+<p id="score"></p>
+<button onclick="App.restart()">Opnieuw</button>
 </div>
 
-<div id="show-answer-wrap" class="center">
-  <button class="btn btn-secondary" id="btn-show-answer">Laat antwoord zien 👀</button>
-</div>
-<div id="answer-buttons-wrap" class="hidden">
-  <div class="center mb16" style="font-family:'Fredoka One',cursive;color:#777;">Wist je het?</div>
-  <div class="answer-buttons">
-    <button class="answer-btn correct" id="btn-correct">✅ Ja!</button>
-    <button class="answer-btn wrong" id="btn-wrong">❌ Nee</button>
-  </div>
-</div>
-```
-
-  </div>
-
-  <!-- TYPEN OEFENING -->
-
-  <div id="step-type" class="card hidden">
-    <div style="display:flex;gap:8px;justify-content:center;margin-bottom:20px;">
-      <div class="dir-btn" id="type-tab-woord">Woord → Betekenis</div>
-      <div class="dir-btn" id="type-tab-betekenis">Betekenis → Woord</div>
-    </div>
-    <div class="progress-label" id="type-progress-label"></div>
-    <div class="progress-bar-bg"><div class="progress-bar-fill" id="type-progress-fill"></div></div>
-
-```
-<div class="type-question-box" id="type-question-box">
-  <div class="type-question-label" id="type-question-label"></div>
-  <div class="type-question-word" id="type-question-word"></div>
-</div>
-
-<div class="type-input-wrap">
-  <input type="text" class="type-input" id="type-input" placeholder="Typ je antwoord hier..." autocomplete="off" autocorrect="off" spellcheck="false" />
-</div>
-
-<div class="type-feedback" id="type-feedback">
-  <span class="fb-icon" id="fb-icon"></span>
-  <div class="fb-text" id="fb-text"></div>
-</div>
-
-<div class="btn-row" id="type-btn-check-wrap">
-  <button class="btn btn-primary" id="btn-check">✏️ Controleer!</button>
-</div>
-<div class="btn-row hidden" id="type-btn-next-wrap">
-  <button class="btn btn-blue" id="btn-next">Volgende →</button>
-</div>
-```
-
-  </div>
-
-  <!-- RESULTATEN -->
-
-  <div id="step-results" class="card hidden">
-    <div class="results">
-      <div class="stars" id="result-stars"></div>
-      <div class="score-circle" id="score-circle">
-        <div class="score-num" id="score-num"></div>
-        <div class="score-denom" id="score-denom"></div>
-      </div>
-      <div class="result-message" id="result-message"></div>
-      <div class="result-sub" id="result-sub"></div>
-
-```
-  <div id="mistakes-section" class="hidden">
-    <div class="mistakes-box">
-      <div class="mistakes-title">📌 Nog te leren:</div>
-      <div id="mistakes-list"></div>
-    </div>
-  </div>
-
-  <div class="btn-row">
-    <button class="btn btn-primary" id="btn-retry">🔁 Opnieuw</button>
-    <button class="btn btn-secondary" id="btn-retry-mistakes" style="display:none">❌ Fouten oefenen</button>
-    <button class="btn btn-ghost" id="btn-back-list">📋 Woordenlijst</button>
-  </div>
-</div>
-```
-
-  </div>
 </div>
 
 <script>
-  const COLORS = ["#FF6B6B","#FFD93D","#6BCB77","#4D96FF","#C77DFF","#FF9A3C"];
+// ==========================
+// STATE
+// ==========================
+const State = {
+  words: [],
+  queue: [],
+  current: 0,
+  score: 0
+};
 
-  let state = {
-    words: [],
-    queue: [],
-    mistakes: [],
-    current: 0,
-    flipped: false,
-    showAnswer: false,
-    score: { correct: 0, wrong: 0 },
-    practiceMode: "flash", // flash | type
-    direction: "woord"     // woord | betekenis
-  };
+// ==========================
+// HELPERS
+// ==========================
+const $ = id => document.getElementById(id);
 
-  function showStep(name) {
-    ["scan","list","flash","type","results"].forEach(s => {
-      document.getElementById("step-" + s).classList.toggle("hidden", s !== name);
+function normalize(s){
+  return s.toLowerCase().trim();
+}
+
+function shuffle(arr){
+  for(let i=arr.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]]=[arr[j],arr[i]];
+  }
+  return arr;
+}
+
+// ==========================
+// UI
+// ==========================
+const UI = {
+  show(screen){
+    ["input","quiz","result"].forEach(id=>{
+      $(id).classList.toggle("hidden", id !== screen);
     });
-    if (name === "type") {
-      setTimeout(() => document.getElementById("type-input").focus(), 100);
+  },
+
+  setQuestion(q){
+    $("question").textContent = q;
+    $("answer").value = "";
+    $("feedback").textContent = "";
+    $("next").classList.add("hidden");
+  },
+
+  showFeedback(msg){
+    $("feedback").textContent = msg;
+    $("next").classList.remove("hidden");
+  },
+
+  showScore(){
+    $("score").textContent = `${State.score} / ${State.queue.length}`;
+  }
+};
+
+// ==========================
+// LOGIC
+// ==========================
+const Logic = {
+
+  parseInput(text){
+    return text.split("\n")
+      .map(l => l.split("-"))
+      .filter(p => p.length === 2)
+      .map(p => ({
+        woord: p[0].trim(),
+        betekenis: p[1].trim()
+      }));
+  },
+
+  start(){
+    const input = $("words").value;
+    const parsed = this.parseInput(input);
+
+    if(!parsed.length){
+      alert("Gebruik: woord - betekenis");
+      return;
     }
-  }
 
-  function showError(msg) {
-    const box = document.getElementById("error-box");
-    box.textContent = "⚠️ " + msg;
-    box.classList.remove("hidden");
-  }
-  function hideError() { document.getElementById("error-box").classList.add("hidden"); }
+    State.words = parsed;
+    State.queue = shuffle([...parsed]);
+    State.current = 0;
+    State.score = 0;
 
-  // ---- LADEN ----
-  document.getElementById("btn-load").addEventListener("click", () => {
-    hideError();
-    const input = document.getElementById("words-input").value.trim();
-    if (!input) { showError("Vul eerst je woordjes in!"); return; }
-    const lines = input.split("\n").map(l => l.trim()).filter(l => l.length > 0);
-    const parsed = [];
-    for (const line of lines) {
-      const match = line.match(/^(.+?)\s*[-:=]\s*(.+)$/);
-      if (match) parsed.push({ woord: match[1].trim(), betekenis: match[2].trim() });
+    UI.show("quiz");
+    this.next();
+  },
+
+  next(){
+    if(State.current >= State.queue.length){
+      UI.show("result");
+      UI.showScore();
+      return;
     }
-    if (parsed.length === 0) { showError("Geen woordjes herkend. Gebruik het formaat: woord - betekenis"); return; }
-    state.words = parsed;
-    renderWordList();
-    showStep("list");
-  });
 
-  function renderWordList() {
-    document.getElementById("word-list-title").textContent = "📋 " + state.words.length + " woordjes klaar!";
-    const tbody = document.getElementById("word-tbody");
-    tbody.innerHTML = "";
-    state.words.forEach((w, i) => {
-      const tr = document.createElement("tr");
-      tr.innerHTML = '<td><span class="word-badge" style="color:' + COLORS[i % COLORS.length] + '">' + escHtml(w.woord) + '</span></td><td>' + escHtml(w.betekenis) + '</td>';
-      tbody.appendChild(tr);
-    });
-  }
+    const card = State.queue[State.current];
+    UI.setQuestion(card.woord);
+  },
 
-  // ---- MODUS & RICHTING ----
-  function selectMode(mode) {
-    state.practiceMode = mode;
-    document.getElementById("modecard-flash").classList.toggle("selected", mode === "flash");
-    document.getElementById("modecard-type").classList.toggle("selected", mode === "type");
-  }
+  check(){
+    const card = State.queue[State.current];
+    const user = normalize($("answer").value);
+    const correct = normalize(card.betekenis);
 
-  function selectDir(dir) {
-    state.direction = dir;
-    document.getElementById("dir-woord").classList.toggle("active", dir === "woord");
-    document.getElementById("dir-betekenis").classList.toggle("active", dir === "betekenis");
-  }
-
-  document.getElementById("btn-start-practice").addEventListener("click", () => startPractice());
-  document.getElementById("btn-edit").addEventListener("click", () => showStep("scan"));
-
-  function startPractice(wordsOverride) {
-    const words = wordsOverride || state.words;
-    state.queue = [...words].sort(() => Math.random() - 0.5);
-    state.current = 0;
-    state.flipped = false;
-    state.showAnswer = false;
-    state.score = { correct: 0, wrong: 0 };
-    state.mistakes = [];
-
-    if (state.practiceMode === "flash") {
-      updateFlashTabs();
-      renderFlashCard();
-      showStep("flash");
+    if(user === correct){
+      State.score++;
+      UI.showFeedback("✅ Goed!");
     } else {
-      updateTypeTabs();
-      renderTypeCard();
-      showStep("type");
+      UI.showFeedback(`❌ Fout! Antwoord: ${card.betekenis}`);
     }
+  },
+
+  nextStep(){
+    State.current++;
+    this.next();
   }
+};
 
-  // ======== FLASHCARD ========
-  function updateFlashTabs() {
-    document.getElementById("flash-tab-woord").classList.toggle("active", state.direction === "woord");
-    document.getElementById("flash-tab-betekenis").classList.toggle("active", state.direction === "betekenis");
-  }
+// ==========================
+// EVENTS
+// ==========================
+const Events = {
+  bind(){
+    $("load").onclick = () => Logic.start();
+    $("check").onclick = () => Logic.check();
+    $("next").onclick = () => Logic.nextStep();
 
-  function renderFlashCard() {
-    const { queue, current, direction, flipped, showAnswer } = state;
-    const card = queue[current];
-    const color = COLORS[current % COLORS.length];
-
-    document.getElementById("flash-progress-label").textContent = (current + 1) + " van " + queue.length;
-    document.getElementById("flash-progress-fill").style.width = ((current / queue.length) * 100) + "%";
-
-    document.getElementById("card-front").style.background = color;
-    document.getElementById("card-back").style.borderColor = color;
-    document.getElementById("card-back").style.color = color;
-
-    document.getElementById("front-label").textContent = direction === "woord" ? "Wat betekent dit woord?" : "Welk woord hoort hierbij?";
-    document.getElementById("front-word").textContent = direction === "woord" ? card.woord : card.betekenis;
-    document.getElementById("front-hint").textContent = showAnswer ? "" : "👆 Tik om het antwoord te zien";
-    document.getElementById("back-label").textContent = direction === "woord" ? "Betekenis" : "Woord";
-    document.getElementById("back-meaning").textContent = direction === "woord" ? card.betekenis : card.woord;
-
-    document.getElementById("flashcard-inner").classList.toggle("flipped", flipped);
-    document.getElementById("flashcard-container").style.cursor = showAnswer ? "default" : "pointer";
-    document.getElementById("show-answer-wrap").classList.toggle("hidden", showAnswer);
-    document.getElementById("answer-buttons-wrap").classList.toggle("hidden", !showAnswer);
-  }
-
-  document.getElementById("flashcard-container").addEventListener("click", () => { if (!state.showAnswer) flipCard(); });
-  document.getElementById("btn-show-answer").addEventListener("click", flipCard);
-
-  function flipCard() {
-    state.flipped = true; state.showAnswer = true; renderFlashCard();
-  }
-
-  document.getElementById("btn-correct").addEventListener("click", () => handleFlashAnswer(true));
-  document.getElementById("btn-wrong").addEventListener("click", () => handleFlashAnswer(false));
-
-  function handleFlashAnswer(correct) {
-    if (correct) state.score.correct++;
-    else { state.score.wrong++; state.mistakes.push(state.queue[state.current]); }
-    nextOrResults();
-  }
-
-  function nextOrResults() {
-    if (state.current + 1 >= state.queue.length) {
-      showResults();
-    } else {
-      state.current++;
-      state.flipped = false;
-      state.showAnswer = false;
-      if (state.practiceMode === "flash") renderFlashCard();
-      else renderTypeCard();
-    }
-  }
-
-  // ======== TYPEN ========
-  function updateTypeTabs() {
-    document.getElementById("type-tab-woord").classList.toggle("active", state.direction === "woord");
-    document.getElementById("type-tab-betekenis").classList.toggle("active", state.direction === "betekenis");
-  }
-
-  function renderTypeCard() {
-    const { queue, current, direction } = state;
-    const card = queue[current];
-    const color = COLORS[current % COLORS.length];
-
-    document.getElementById("type-progress-label").textContent = (current + 1) + " van " + queue.length;
-    document.getElementById("type-progress-fill").style.width = ((current / queue.length) * 100) + "%";
-
-    document.getElementById("type-question-box").style.background = color;
-    document.getElementById("type-question-label").textContent = direction === "woord" ? "Wat betekent dit woord?" : "Welk woord hoort hierbij?";
-    document.getElementById("type-question-word").textContent = direction === "woord" ? card.woord : card.betekenis;
-
-    const inp = document.getElementById("type-input");
-    inp.value = "";
-    inp.className = "type-input";
-    inp.disabled = false;
-
-    document.getElementById("type-feedback").className = "type-feedback";
-    document.getElementById("type-btn-check-wrap").classList.remove("hidden");
-    document.getElementById("type-btn-next-wrap").classList.add("hidden");
-
-    setTimeout(() => inp.focus(), 50);
-  }
-
-  document.getElementById("type-input").addEventListener("keydown", (e) => {
-    if (e.key === "Enter") {
-      if (!document.getElementById("type-btn-check-wrap").classList.contains("hidden")) {
-        checkTypeAnswer();
-      } else {
-        goNextType();
+    $("answer").addEventListener("keydown", e=>{
+      if(e.key === "Enter"){
+        if($("next").classList.contains("hidden")) Logic.check();
+        else Logic.nextStep();
       }
-    }
-  });
-
-  document.getElementById("btn-check").addEventListener("click", checkTypeAnswer);
-  document.getElementById("btn-next").addEventListener("click", goNextType);
-
-  function normalize(str) {
-    return str.trim().toLowerCase()
-      .replace(/[àáâã]/g, 'a').replace(/[èéêë]/g, 'e')
-      .replace(/[ìíîï]/g, 'i').replace(/[òóôõ]/g, 'o')
-      .replace(/[ùúûü]/g, 'u');
+    });
   }
+};
 
-  function checkTypeAnswer() {
-    const inp = document.getElementById("type-input");
-    const userRaw = inp.value.trim();
-    if (!userRaw) return;
-
-    const card = state.queue[state.current];
-    const correct = state.direction === "woord" ? card.betekenis : card.woord;
-    const isCorrect = normalize(userRaw) === normalize(correct);
-
-    inp.disabled = true;
-    inp.className = "type-input " + (isCorrect ? "correct-input" : "wrong-input");
-
-    const fb = document.getElementById("type-feedback");
-    const fbIcon = document.getElementById("fb-icon");
-    const fbText = document.getElementById("fb-text");
-
-    if (isCorrect) {
-      fb.className = "type-feedback correct-fb show";
-      fbIcon.textContent = "✅";
-      fbText.innerHTML = "<strong>Helemaal goed!</strong> Zo schrijf je het op.";
-      state.score.correct++;
-    } else {
-      fb.className = "type-feedback wrong-fb show";
-      fbIcon.textContent = "❌";
-      fbText.innerHTML = "Niet helemaal. Het juiste antwoord is:<br><span class='fb-correct-answer'>" + escHtml(correct) + "</span><br><small style='font-weight:400;color:#888;margin-top:4px;display:block'>Jij schreef: " + escHtml(userRaw) + "</small>";
-      state.score.wrong++;
-      state.mistakes.push(card);
-    }
-
-    document.getElementById("type-btn-check-wrap").classList.add("hidden");
-    document.getElementById("type-btn-next-wrap").classList.remove("hidden");
+// ==========================
+// APP
+// ==========================
+const App = {
+  init(){
+    Events.bind();
+  },
+  restart(){
+    UI.show("input");
   }
+};
 
-  function goNextType() {
-    nextOrResults();
-  }
-
-  // ======== RESULTATEN ========
-  function showResults() {
-    const { score, queue, mistakes, practiceMode } = state;
-    const pct = Math.round((score.correct / queue.length) * 100);
-    let msg, stars, color;
-    if (pct === 100)    { msg = "Perfecte score! 🏆";              stars = "⭐⭐⭐"; color = "#FFD93D"; }
-    else if (pct >= 70) { msg = "Super goed gedaan! 🎉";           stars = "⭐⭐";   color = "#6BCB77"; }
-    else if (pct >= 40) { msg = "Goed bezig! Nog even oefenen 💪"; stars = "⭐";     color = "#FF9A3C"; }
-    else                { msg = "Blijf oefenen, je komt er! 📚";   stars = "💪";     color = "#4D96FF"; }
-
-    document.getElementById("result-stars").textContent = stars;
-    document.getElementById("score-circle").style.background = color;
-    document.getElementById("score-num").textContent = score.correct;
-    document.getElementById("score-denom").textContent = "van " + queue.length;
-    document.getElementById("result-message").textContent = msg;
-    document.getElementById("result-sub").innerHTML = "✅ " + score.correct + " goed &nbsp;|&nbsp; ❌ " + score.wrong + " fout";
-
-    const mistakesSection = document.getElementById("mistakes-section");
-    const retryMistakes = document.getElementById("btn-retry-mistakes");
-    if (mistakes.length > 0) {
-      mistakesSection.classList.remove("hidden");
-      retryMistakes.style.display = "inline-flex";
-      const list = document.getElementById("mistakes-list");
-      list.innerHTML = "";
-      mistakes.forEach(m => {
-        const row = document.createElement("div");
-        row.className = "mistake-row";
-        row.innerHTML = '<span class="mistake-word">' + escHtml(m.woord) + '</span><span class="mistake-meaning">→ ' + escHtml(m.betekenis) + '</span>';
-        list.appendChild(row);
-      });
-    } else {
-      mistakesSection.classList.add("hidden");
-      retryMistakes.style.display = "none";
-    }
-
-    showStep("results");
-  }
-
-  document.getElementById("btn-retry").addEventListener("click", () => startPractice());
-  document.getElementById("btn-retry-mistakes").addEventListener("click", () => {
-    const toRetry = [...state.mistakes];
-    state.mistakes = [];
-    startPractice(toRetry);
-  });
-  document.getElementById("btn-back-list").addEventListener("click", () => showStep("list"));
-
-  function escHtml(str) {
-    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  }
+App.init();
 </script>
-
 </body>
 </html>
