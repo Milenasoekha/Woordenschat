@@ -1,197 +1,338 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Woordjes Leren</title>
-
-<style>
-body{font-family:sans-serif;background:#FFF9F0;margin:0}
-.app{max-width:700px;margin:auto;padding:20px}
-.card{background:white;border-radius:16px;padding:20px;margin-bottom:20px}
-.hidden{display:none}
-button{padding:10px 20px;border:none;border-radius:10px;cursor:pointer}
-.primary{background:#FF6B6B;color:white}
-.secondary{background:#4D96FF;color:white}
-</style>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Woordjes Leren ✏️</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Nunito',sans-serif;background:#FFF9F0}
+    .app{
+      min-height:100vh;
+      background-image:radial-gradient(circle at 15% 15%,#FFE5E5 0%,transparent 45%),
+                       radial-gradient(circle at 85% 85%,#E5F0FF 0%,transparent 45%);
+      padding:24px 16px 48px;
+    }
+    .header{text-align:center;margin-bottom:28px}
+    .title{font-family:'Fredoka One',cursive;font-size:2.6rem;color:#2D2D2D;letter-spacing:1px}
+    .title span{color:#FF6B6B}
+    .subtitle{font-size:.95rem;color:#888;margin-top:4px}
+    .card{background:white;border-radius:24px;padding:28px 24px;box-shadow:0 8px 32px rgba(0,0,0,.08);max-width:640px;margin:0 auto}
+    .sec-title{font-family:'Fredoka One',cursive;font-size:1.5rem;color:#2D2D2D;margin-bottom:6px;text-align:center}
+    .sec-sub{text-align:center;color:#888;font-size:.9rem;margin-bottom:18px;line-height:1.6}
+    .sec-sub strong{color:#FF6B6B}
+    textarea{width:100%;min-height:200px;border-radius:16px;border:2px solid #FFD93D;padding:14px;font-family:'Nunito',sans-serif;font-size:1rem;color:#2D2D2D;resize:vertical;outline:none;background:#FFFDF0;line-height:1.8;transition:border-color .2s}
+    textarea:focus{border-color:#FF9A3C}
+    .btn{display:inline-flex;align-items:center;gap:7px;padding:12px 24px;border-radius:50px;border:none;font-family:'Fredoka One',cursive;font-size:1rem;cursor:pointer;transition:transform .15s,box-shadow .15s;letter-spacing:.4px}
+    .btn:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.15)}
+    .btn-primary{background:#FF6B6B;color:white}
+    .btn-secondary{background:#FFD93D;color:#2D2D2D}
+    .btn-ghost{background:#f0f0f0;color:#555}
+    .btn-purple{background:#C77DFF;color:white}
+    .btn-blue{background:#4D96FF;color:white}
+    .btn-sm{padding:8px 16px;font-size:.85rem}
+    .btn-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:18px}
+    .saved-section{margin-bottom:20px}
+    .saved-title{font-family:'Fredoka One',cursive;font-size:1rem;color:#888;margin-bottom:10px}
+    .saved-list{display:flex;flex-direction:column;gap:8px}
+    .saved-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:14px;background:#F8F8FF;border:2px solid #E8E8FF;cursor:pointer;transition:all .2s}
+    .saved-item:hover{border-color:#C77DFF;background:#F5F0FF}
+    .saved-item-name{font-weight:800;color:#2D2D2D;flex:1;font-size:.95rem}
+    .saved-item-del{background:none;border:none;cursor:pointer;opacity:.4;transition:opacity .2s}
+    .saved-item-del:hover{opacity:1}
+    .save-row{display:flex;gap:8px;margin-top:12px}
+    .save-input{flex:1;padding:10px 14px;border-radius:12px;border:2px solid #ddd;font-family:'Nunito',sans-serif;outline:none}
+    .word-table{width:100%;border-collapse:collapse;margin-bottom:20px}
+    .word-table th{font-family:'Fredoka One',cursive;padding:10px;text-align:left;color:white;background:#4D96FF}
+    .word-table td{padding:9px;font-size:.9rem;border-bottom:1px solid #f0f0f0}
+    .dot{width:10px;height:10px;border-radius:50%;background:#eee;display:inline-block;margin-right:2px}
+    .dot.good{background:#6BCB77}
+    .dot.bad{background:#FF6B6B}
+    .mode-picker{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:18px}
+    .mode-card{border:2px solid #eee;border-radius:16px;padding:12px;text-align:center;cursor:pointer;background:#fafafa;transition:all .2s}
+    .mode-card.selected{border-color:#FF6B6B;background:#FFF0F0}
+    .mode-icon{font-size:1.5rem;display:block}
+    .mode-name{font-family:'Fredoka One',cursive;font-size:.85rem}
+    .dir-row{display:flex;gap:8px;justify-content:center;margin-bottom:16px}
+    .dir-btn{padding:8px 16px;border-radius:50px;border:2px solid transparent;background:#f0f0f0;cursor:pointer;font-family:'Fredoka One',cursive;font-size:.8rem}
+    .dir-btn.active{background:white;color:#4D96FF;border-color:#4D96FF}
+    .prog-bar-bg{background:#f0f0f0;border-radius:50px;height:11px;overflow:hidden;margin-bottom:15px}
+    .prog-bar-fill{height:100%;background:linear-gradient(90deg,#FF6B6B,#FFD93D);transition:width .4s}
+    .flashcard-wrap{perspective:1200px;width:100%;max-width:400px;margin:0 auto 20px;height:200px}
+    .flashcard-inner{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d}
+    .flashcard-inner.flipped{transform:rotateY(180deg)}
+    .fc-face{position:absolute;inset:0;border-radius:22px;display:flex;flex-direction:column;align-items:center;justify-content:center;backface-visibility:hidden;padding:20px;text-align:center;box-shadow:0 8px 20px rgba(0,0,0,0.1)}
+    .fc-back{background:white;transform:rotateY(180deg);border:3px solid currentColor}
+    .type-q-box{border-radius:18px;padding:24px;text-align:center;margin-bottom:20px;color:white}
+    .type-inp{width:100%;padding:14px;border-radius:13px;border:2px solid #ddd;font-size:1rem;margin-bottom:10px;outline:none}
+    .feedback{border-radius:13px;padding:13px;margin-bottom:14px;display:none}
+    .feedback.show{display:flex;gap:10px}
+    .feedback.ok{background:#F0FFF4;color:#2D8A4E;border:2px solid #6BCB77}
+    .feedback.bad{background:#FFF0F0;color:#CC3333;border:2px solid #FF6B6B}
+    .dictee-show-box{border-radius:22px;padding:30px;text-align:center;color:white;margin-bottom:20px}
+    .dictee-word.vanish{opacity:0;filter:blur(10px)}
+    .score-circle{width:100px;height:100px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 15px;color:white;font-family:'Fredoka One',cursive}
+    .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(100px);background:#2D2D2D;color:white;padding:12px 24px;border-radius:50px;transition:transform .3s;z-index:999}
+    .toast.show{transform:translateX(-50%) translateY(0)}
+    .hidden{display:none !important}
+    .error-box{background:#FFF0F0;border:2px solid #FF6B6B;padding:10px;border-radius:10px;color:red;margin-top:10px}
+  </style>
 </head>
-
 <body>
 <div class="app">
+  <div class="header">
+    <div class="title">Woordjes <span>Leren</span> ✏️</div>
+    <div class="subtitle">Typ, oefen en onthoud je woordjes!</div>
+  </div>
 
-<div id="input" class="card">
-<h2>📝 Woordjes</h2>
-<textarea id="words" rows="8" style="width:100%"></textarea>
-<br><br>
-<button id="load" class="primary">Start</button>
+  <div id="step-scan" class="card">
+    <div id="saved-section" class="saved-section hidden">
+      <div class="saved-title">💾 Opgeslagen lijsten</div>
+      <div class="saved-list" id="saved-list"></div>
+      <hr style="margin:15px 0; border:1px dashed #eee">
+    </div>
+    <div class="sec-title">📝 Voer je woordjes in</div>
+    <p class="sec-sub">Typ elk woordje op een nieuwe regel: <strong>woord - betekenis</strong></p>
+    <textarea id="words-input" placeholder="appel - een rond fruit&#10;fiets - vervoermiddel met twee wielen"></textarea>
+    <div id="error-box" class="error-box hidden"></div>
+    <div class="btn-row">
+      <button class="btn btn-primary" id="btn-load">📋 Woordjes laden!</button>
+    </div>
+    <div class="save-row">
+      <input class="save-input" id="save-name" placeholder="Naam voor deze lijst..." maxlength="40"/>
+      <button class="btn btn-purple btn-sm" id="btn-save-list">Opslaan</button>
+    </div>
+  </div>
+
+  <div id="step-list" class="card hidden">
+    <div class="sec-title" id="word-list-title"></div>
+    <table class="word-table">
+      <thead><tr><th>Woord</th><th>Betekenis</th><th>Score</th></tr></thead>
+      <tbody id="word-tbody"></tbody>
+    </table>
+    <div class="sec-title" style="font-size:1.1rem">Kies modus:</div>
+    <div class="mode-picker">
+      <div class="mode-card selected" id="modecard-flash" onclick="selectMode('flash')">
+        <span class="mode-icon">🃏</span><div class="mode-name">Flashcards</div>
+      </div>
+      <div class="mode-card" id="modecard-type" onclick="selectMode('type')">
+        <span class="mode-icon">⌨️</span><div class="mode-name">Schrijf</div>
+      </div>
+      <div class="mode-card" id="modecard-dictee" onclick="selectMode('dictee')">
+        <span class="mode-icon">👁️</span><div class="mode-name">Dictee</div>
+      </div>
+    </div>
+    <div class="dir-row">
+      <div class="dir-btn active" id="dir-woord" onclick="selectDir('woord')">📝 Woord → Betekenis</div>
+      <div class="dir-btn" id="dir-betekenis" onclick="selectDir('betekenis')">🔁 Betekenis → Woord</div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" id="btn-start">🚀 Start!</button>
+      <button class="btn btn-ghost" id="btn-edit">✏️ Aanpassen</button>
+    </div>
+  </div>
+
+  <div id="step-flash" class="card hidden">
+    <div class="prog-bar-bg"><div class="prog-bar-fill" id="flash-prog-fill" style="width:0%"></div></div>
+    <div class="flashcard-wrap" id="fc-wrap">
+      <div class="flashcard-inner" id="fc-inner">
+        <div class="fc-face fc-front" id="fc-front">
+          <div class="fc-word" id="fc-front-word" style="font-size:1.8rem; font-family:'Fredoka One'"></div>
+          <div style="margin-top:10px; opacity:0.6">Tik voor antwoord</div>
+        </div>
+        <div class="fc-face fc-back" id="fc-back">
+          <div class="fc-word" id="fc-back-ans" style="font-size:1.5rem"></div>
+        </div>
+      </div>
+    </div>
+    <div id="fc-show-wrap" class="center" style="text-align:center">
+      <button class="btn btn-secondary" id="btn-fc-show">👀 Toon antwoord</button>
+    </div>
+    <div id="fc-ans-wrap" class="hidden">
+      <div class="btn-row">
+        <button class="btn btn-primary" style="background:#6BCB77" id="btn-yes">✅ Ja</button>
+        <button class="btn btn-primary" style="background:#FF6B6B" id="btn-no">❌ Nee</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="step-type" class="card hidden">
+    <div class="prog-bar-bg"><div class="prog-bar-fill" id="type-prog-fill" style="width:0%"></div></div>
+    <div id="dictee-header" class="hidden">
+        <div class="dictee-show-box" id="dictee-show-box">
+            <div id="dictee-word" style="font-size:2rem; font-family:'Fredoka One'"></div>
+        </div>
+    </div>
+    <div id="type-header">
+        <div class="type-q-box" id="type-q-box">
+            <div id="type-q-word" style="font-size:1.8rem; font-family:'Fredoka One'"></div>
+        </div>
+    </div>
+    <input type="text" class="type-inp" id="type-inp" placeholder="Antwoord..." autocomplete="off">
+    <div class="feedback" id="feedback"><span id="fb-ico"></span><div id="fb-body"></div></div>
+    <div class="btn-row" id="type-btns">
+      <button class="btn btn-primary" id="btn-check">Controleer</button>
+      <button class="btn btn-blue hidden" id="btn-next">Volgende →</button>
+    </div>
+  </div>
+
+  <div id="step-results" class="card hidden" style="text-align:center">
+    <div class="score-circle" id="res-circle"><div id="res-num" style="font-size:2rem"></div></div>
+    <h2 id="res-msg" style="font-family:'Fredoka One'"></h2>
+    <div id="mistakes-box" class="hidden" style="text-align:left; margin-top:20px; background:#fff5f5; padding:15px; border-radius:15px">
+        <strong>Foutjes:</strong><div id="mistakes-list"></div>
+    </div>
+    <div class="btn-row" style="margin-top:20px">
+      <button class="btn btn-primary" id="btn-retry">Opnieuw</button>
+      <button class="btn btn-ghost" onclick="showStep('list')">Lijst</button>
+    </div>
+  </div>
 </div>
 
-<div id="quiz" class="card hidden">
-<h2 id="question"></h2>
-<input id="answer" placeholder="Typ antwoord..." style="width:100%;padding:10px">
-<br><br>
-<button id="check" class="primary">Check</button>
-<button id="next" class="secondary hidden">Volgende</button>
-<p id="feedback"></p>
-</div>
-
-<div id="result" class="card hidden">
-<h2>Resultaat</h2>
-<p id="score"></p>
-<button onclick="App.restart()">Opnieuw</button>
-</div>
-
-</div>
+<div class="toast" id="toast"></div>
 
 <script>
-// ==========================
-// STATE
-// ==========================
-const State = {
-  words: [],
-  queue: [],
-  current: 0,
-  score: 0
-};
-
-// ==========================
-// HELPERS
-// ==========================
+const COLORS = ["#FF6B6B","#FFD93D","#6BCB77","#4D96FF","#C77DFF","#FF9A3C"];
 const $ = id => document.getElementById(id);
+let state = { words:[], progress:{}, queue:[], mistakes:[], current:0, practiceMode:"flash", direction:"woord", score:{correct:0,wrong:0} };
 
-function normalize(s){
-  return s.toLowerCase().trim();
-}
+function showStep(n){ ["scan","list","flash","type","results"].forEach(s=>$("step-"+s).classList.toggle("hidden", s!==n)); }
+function toast(m){ const e=$("toast"); e.textContent=m; e.classList.add("show"); setTimeout(()=>e.classList.remove("show"),2000); }
+function normalize(s){ return s.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); }
 
-function shuffle(arr){
-  for(let i=arr.length-1;i>0;i--){
-    const j=Math.floor(Math.random()*(i+1));
-    [arr[i],arr[j]]=[arr[j],arr[i]];
-  }
-  return arr;
-}
-
-// ==========================
-// UI
-// ==========================
-const UI = {
-  show(screen){
-    ["input","quiz","result"].forEach(id=>{
-      $(id).classList.toggle("hidden", id !== screen);
+// Opslag
+function saveAll(){ if(state.listName) localStorage.setItem("w_list_"+state.listName, JSON.stringify(state.words)); }
+function loadSaved(){
+    const list=$("saved-list"); list.innerHTML="";
+    const keys = Object.keys(localStorage).filter(k=>k.startsWith("w_list_"));
+    $("saved-section").classList.toggle("hidden", keys.length===0);
+    keys.forEach(k=>{
+        const name = k.replace("w_list_","");
+        const div = document.createElement("div"); div.className="saved-item";
+        div.innerHTML = `<span class="saved-item-name">📚 ${name}</span><button class="saved-item-del" onclick="event.stopPropagation(); localStorage.removeItem('${k}'); loadSaved()">🗑️</button>`;
+        div.onclick = () => {
+            state.words = JSON.parse(localStorage.getItem(k));
+            state.listName = name;
+            $("words-input").value = state.words.map(w=>`${w.woord} - ${w.betekenis}`).join("\n");
+            renderWordList(); showStep("list");
+        };
+        list.appendChild(div);
     });
-  },
+}
 
-  setQuestion(q){
-    $("question").textContent = q;
-    $("answer").value = "";
-    $("feedback").textContent = "";
-    $("next").classList.add("hidden");
-  },
-
-  showFeedback(msg){
-    $("feedback").textContent = msg;
-    $("next").classList.remove("hidden");
-  },
-
-  showScore(){
-    $("score").textContent = `${State.score} / ${State.queue.length}`;
-  }
+$("btn-load").onclick = () => {
+    const input = $("words-input").value.trim();
+    if(!input) return;
+    state.words = input.split("\n").map(l => {
+        const parts = l.split(/[-:=]/);
+        return parts.length > 1 ? {woord:parts[0].trim(), betekenis:parts[1].trim()} : null;
+    }).filter(w => w);
+    renderWordList(); showStep("list");
 };
 
-// ==========================
-// LOGIC
-// ==========================
-const Logic = {
+$("btn-save-list").onclick = () => {
+    const name = $("save-name").value.trim();
+    if(!name || !state.words.length) return toast("Geef een naam op!");
+    state.listName = name;
+    saveAll(); loadSaved(); toast("Opgeslagen!");
+};
 
-  parseInput(text){
-    return text.split("\n")
-      .map(l => l.split("-"))
-      .filter(p => p.length === 2)
-      .map(p => ({
-        woord: p[0].trim(),
-        betekenis: p[1].trim()
-      }));
-  },
+function renderWordList(){
+    const tbody = $("word-tbody"); tbody.innerHTML="";
+    state.words.forEach((w,i)=>{
+        tbody.innerHTML += `<tr><td>${w.woord}</td><td>${w.betekenis}</td><td><div class="dot good"></div></td></tr>`;
+    });
+    $("word-list-title").textContent = state.words.length + " Woorden";
+}
 
-  start(){
-    const input = $("words").value;
-    const parsed = this.parseInput(input);
+function selectMode(m){ state.practiceMode=m; document.querySelectorAll(".mode-card").forEach(c=>c.classList.toggle("selected", c.id.includes(m))); }
+function selectDir(d){ state.direction=d; $("dir-woord").classList.toggle("active", d==="woord"); $("dir-betekenis").classList.toggle("active", d==="betekenis"); }
 
-    if(!parsed.length){
-      alert("Gebruik: woord - betekenis");
-      return;
-    }
+$("btn-start").onclick = () => {
+    state.queue = [...state.words].sort(()=>Math.random()-0.5);
+    state.current = 0; state.score = {correct:0, wrong:0}; state.mistakes = [];
+    if(state.practiceMode === "flash") { showStep("flash"); renderFlash(); }
+    else { showStep("type"); renderType(); }
+};
 
-    State.words = parsed;
-    State.queue = shuffle([...parsed]);
-    State.current = 0;
-    State.score = 0;
+// Flashcards
+function renderFlash(){
+    const w = state.queue[state.current];
+    $("fc-inner").classList.remove("flipped");
+    $("fc-ans-wrap").classList.add("hidden");
+    $("fc-show-wrap").classList.remove("hidden");
+    $("fc-front").style.background = COLORS[state.current % COLORS.length];
+    $("fc-front-word").textContent = state.direction === "woord" ? w.woord : w.betekenis;
+    $("fc-back-ans").textContent = state.direction === "woord" ? w.betekenis : w.woord;
+    $("fc-back").style.color = COLORS[state.current % COLORS.length];
+    $("flash-prog-fill").style.width = ((state.current / state.queue.length)*100) + "%";
+}
 
-    UI.show("quiz");
-    this.next();
-  },
+$("btn-fc-show").onclick = () => { $("fc-inner").classList.add("flipped"); $("fc-ans-wrap").classList.remove("hidden"); $("fc-show-wrap").classList.add("hidden"); };
+$("btn-yes").onclick = () => { state.score.correct++; nextTask(); };
+$("btn-no").onclick = () => { state.score.wrong++; state.mistakes.push(state.queue[state.current]); nextTask(); };
 
-  next(){
-    if(State.current >= State.queue.length){
-      UI.show("result");
-      UI.showScore();
-      return;
-    }
-
-    const card = State.queue[State.current];
-    UI.setQuestion(card.woord);
-  },
-
-  check(){
-    const card = State.queue[State.current];
-    const user = normalize($("answer").value);
-    const correct = normalize(card.betekenis);
-
-    if(user === correct){
-      State.score++;
-      UI.showFeedback("✅ Goed!");
+// Typen / Dictee
+function renderType(){
+    const w = state.queue[state.current];
+    const isDictee = state.practiceMode === "dictee";
+    $("type-prog-fill").style.width = ((state.current / state.queue.length)*100) + "%";
+    $("type-inp").value = ""; $("type-inp").disabled = false;
+    $("feedback").classList.remove("show");
+    $("btn-check").classList.remove("hidden"); $("btn-next").classList.add("hidden");
+    
+    if(isDictee){
+        $("type-header").classList.add("hidden"); $("dictee-header").classList.remove("hidden");
+        $("dictee-word").textContent = state.direction === "woord" ? w.woord : w.betekenis;
+        $("dictee-word").classList.remove("vanish");
+        $("dictee-show-box").style.background = COLORS[state.current % COLORS.length];
+        setTimeout(() => { $("dictee-word").classList.add("vanish"); $("type-inp").focus(); }, 2000);
     } else {
-      UI.showFeedback(`❌ Fout! Antwoord: ${card.betekenis}`);
+        $("type-header").classList.remove("hidden"); $("dictee-header").classList.add("hidden");
+        $("type-q-box").style.background = COLORS[state.current % COLORS.length];
+        $("type-q-word").textContent = state.direction === "woord" ? w.woord : w.betekenis;
+        $("type-inp").focus();
     }
-  },
+}
 
-  nextStep(){
-    State.current++;
-    this.next();
-  }
+$("btn-check").onclick = () => {
+    const user = normalize($("type-inp").value);
+    const correct = normalize(state.direction === "woord" ? state.queue[state.current].betekenis : state.queue[state.current].woord);
+    const isOk = user === correct;
+    $("type-inp").disabled = true;
+    $("feedback").className = "feedback show " + (isOk ? "ok" : "bad");
+    $("fb-ico").textContent = isOk ? "✅" : "❌";
+    $("fb-body").textContent = isOk ? "Goed zo!" : "Foutje! Het was: " + (state.direction === "woord" ? state.queue[state.current].betekenis : state.queue[state.current].woord);
+    if(isOk) state.score.correct++; else { state.score.wrong++; state.mistakes.push(state.queue[state.current]); }
+    $("btn-check").classList.add("hidden"); $("btn-next").classList.remove("hidden");
 };
 
-// ==========================
-// EVENTS
-// ==========================
-const Events = {
-  bind(){
-    $("load").onclick = () => Logic.start();
-    $("check").onclick = () => Logic.check();
-    $("next").onclick = () => Logic.nextStep();
+$("btn-next").onclick = () => nextTask();
+$("type-inp").onkeydown = (e) => { if(e.key === "Enter" && !$("btn-check").classList.contains("hidden")) $("btn-check").click(); else if(e.key === "Enter") $("btn-next").click(); };
 
-    $("answer").addEventListener("keydown", e=>{
-      if(e.key === "Enter"){
-        if($("next").classList.contains("hidden")) Logic.check();
-        else Logic.nextStep();
-      }
-    });
-  }
-};
+function nextTask(){
+    state.current++;
+    if(state.current < state.queue.length) {
+        if(state.practiceMode === "flash") renderFlash(); else renderType();
+    } else showResults();
+}
 
-// ==========================
-// APP
-// ==========================
-const App = {
-  init(){
-    Events.bind();
-  },
-  restart(){
-    UI.show("input");
-  }
-};
+function showResults(){
+    showStep("results");
+    $("res-num").textContent = state.score.correct + " / " + state.queue.length;
+    $("res-circle").style.background = state.score.correct === state.queue.length ? "#6BCB77" : "#FF6B6B";
+    $("res-msg").textContent = state.score.correct === state.queue.length ? "Topper! 🏆" : "Goed geprobeerd!";
+    if(state.mistakes.length) {
+        $("mistakes-box").classList.remove("hidden");
+        $("mistakes-list").innerHTML = state.mistakes.map(m => `<div>${m.woord} - ${m.betekenis}</div>`).join("");
+    } else $("mistakes-box").classList.add("hidden");
+}
 
-App.init();
+$("btn-retry").onclick = () => $("btn-start").click();
+$("btn-edit").onclick = () => showStep("scan");
+
+window.onload = loadSaved;
 </script>
 </body>
 </html>
